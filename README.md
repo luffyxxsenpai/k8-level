@@ -19,9 +19,9 @@
 - result:   http://localhost:8081
 
 ### VOTE
- this is the frontend of voting app
- Running on: http://localhost:8080
- Default values of these envs are also mentioned 
+- this is the frontend of voting app
+- Running on: http://localhost:8080
+- Default values of these envs are also mentioned 
 ```
 Environment Variables required:
 OPTION_A: Cats
@@ -32,8 +32,8 @@ REDIS_DB: 0
 ```
 
 ### worker
-this fetches data from redis and filter it and save it to postgres db
-would suggest you to make a postgres user and a database instead of default one 
+- this fetches data from redis and filter it and save it to postgres db
+- would suggest you to make a postgres user and a database instead of default one 
 ```
 Environment Variables and Default Values:
 POSTGRES_HOST = db
@@ -45,8 +45,8 @@ REDIS_PORT = 6379
 REDIS_DB = 0
 ```
 ### result
-this is a frontend to show the result of votes
-it will fetch data from postgres and reflect on [website](http://localhost:8081) 
+- this is a frontend to show the result of votes
+- it will fetch data from postgres and reflect on [website](http://localhost:8081) 
 ```
 POSTGRES_USER
 POSTGRES_PASSWORD
