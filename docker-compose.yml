@@ -1,0 +1,71 @@
+services:
+  vote:
+    image: luffyxxsenpai/voting:vote
+    container_name: vote
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    networks:
+      - voting_network
+
+  worker:
+    image: luffyxxsenpai/voting:worker
+    container_name: worker
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DATABASE=postgres
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - voting_network
+
+  result:
+    image: luffyxxsenpai/voting:result
+    container_name: result
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DATABASE=postgres
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+    networks:
+      - voting_network
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - voting_network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - voting_network
+
+networks:
+  voting_network:
+    driver: bridge
+
