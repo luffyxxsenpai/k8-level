@@ -1,7 +1,6 @@
 services:
   vote:
     image: luffyxxsenpai/voting:vote
-    container_name: vote
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -14,7 +13,6 @@ services:
 
   worker:
     image: luffyxxsenpai/voting:worker
-    container_name: worker
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -31,7 +29,6 @@ services:
 
   result:
     image: luffyxxsenpai/voting:result
-    container_name: result
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -47,15 +44,18 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: redis
     ports:
       - "6379:6379"
     networks:
       - voting_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   postgres:
     image: postgres:15-alpine
-    container_name: postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -64,8 +64,13 @@ services:
       - "5432:5432"
     networks:
       - voting_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 networks:
   voting_network:
     driver: bridge
+
+volumes:
+  postgres_data:
 

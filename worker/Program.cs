@@ -126,7 +126,10 @@ namespace Worker
                 try
                 {
                     Console.Error.WriteLine("Connecting to Redis");
-                    return ConnectionMultiplexer.Connect(ipAddress);
+                    var connection = ConnectionMultiplexer.Connect(ipAddress);
+                    Console.WriteLine("Worker successfully connected to Redis");
+                    return connection;
+
                 }
                 catch (RedisConnectionException)
                 {
