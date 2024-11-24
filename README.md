@@ -105,12 +105,11 @@ POSTGRES_DATABASE
 - in this we add ingress but level wise
 
 - manifestV3_1 -> we do host-based routing (my fav) 
-- manifestV3_2 -> we make a very simple path-based routing ingress
-- manifestV3_3 -> we go HTTPS TLS SSL 
-- manifestV3_4 -> extra features
+- manifestV3_2 -> we do path-based routing (BUGS, 404 , don't try)
+- manifestV3_3 -> we go HTTPS 
 
 **install ingress controller**
 - `minikube addons enable ingress` or `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml`
 - `kubectl get pods -n ingress-nginx`
 
-
+---

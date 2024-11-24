@@ -1,4 +1,3 @@
-#path based
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -18,10 +17,9 @@ spec:
             port:
               number: 8080
       - path: /result
-        pathType: Prefix 
+        pathType: Exact 
         backend:
           service:
             name: result
             port:
               number: 8081
-
