@@ -88,6 +88,7 @@ POSTGRES_DATABASE
 - the very basic one
 - only uses deployments and services
 - can be accessible by running 
+- `kubectl apply -f manifestV1.yaml`
 - `kubectl port-forward --address 0.0.0.0 services/vote 8080:8080`
 - `kubectl port-forward --address 0.0.0.0 services/result 8081:8081`
 - --address 0.0.0.0 allow you to check it from your whole local network so give an extra vote to cats using your Phone on your laptop private IP(device on which your cluster is running) and port 8080 like `http://192.168.1.3:8080`
@@ -96,5 +97,19 @@ POSTGRES_DATABASE
 - this adds the configmap and secret resources in our deployments.
 - even though out secrets are not directly saved in deployments, its still only encoded and not encrypted.
 - one can easily decode our base64 encoded secrets if its deploy in this way, in later versions we will learn how to have secrets in a secret way on our clusters
+- `kubectl apply -f manifestV2.yaml`
+- `kubectl describe cm vote-cm`
+- `kubectl describe secret vote-secret`
+
+## manifestV3
+- in this we add ingress but level wise
+- manifestV3_1 -> we make a very simple path-based routing ingress
+- manifestV3_2 -> we host-based routing 
+- manifestV3_3 -> we go HTTPS TLS SSL LOCKS 
+
+**install ingress controller**
+- `minikube addons enable ingress` or `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml`
+- `kubectl get pods -n ingress-nginx`
+
 
 

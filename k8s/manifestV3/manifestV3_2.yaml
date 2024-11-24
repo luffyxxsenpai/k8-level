@@ -1,0 +1,29 @@
+#host based
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vote-host-ingress
+spec:
+  rules:
+  - host: vote.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: vote
+            port:
+              number: 8080
+  - host: result.vote.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: result
+            port:
+              number: 8081
+
