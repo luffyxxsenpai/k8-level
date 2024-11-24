@@ -73,3 +73,22 @@ POSTGRES_DATABASE
 - in the docker-compose file i am using my image directly. you can either use your own image or the dockerfile as context.
 
 `docker-compose up --build --remove-orphans`
+
+# FAKE VOTE
+- it will generate fake vote requests.
+- in the `fake-vote` directory, just run the shell script and it will generate votes
+- to change the number off votes, edit the line `ab -n 100 -c 50 -p posta -T "application/x-www-form-urlencoded" http://localhost:8080/` where `-n` defines the number of votes 
+# KUBERNETES
+
+- for now, i am planning to deploy it in multiple versions where we will slowly increase the resources and tools used.
+
+## manifestV1.yaml
+- the very basic one
+- only uses deployments and services
+- can be accessible by running 
+- `kubectl port-forward --address 0.0.0.0 services/vote 8080:8080`
+- `kubectl port-forward --address 0.0.0.0 services/result 8081:8081`
+- --address 0.0.0.0 allow you to check it from your whole local network so give an extra vote to cats using your Phone on your laptop private IP(device on which your cluster is running) and port 8080 like `http://192.168.1.3:8080`
+
+
+
