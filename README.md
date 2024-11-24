@@ -92,5 +92,9 @@ POSTGRES_DATABASE
 - `kubectl port-forward --address 0.0.0.0 services/result 8081:8081`
 - --address 0.0.0.0 allow you to check it from your whole local network so give an extra vote to cats using your Phone on your laptop private IP(device on which your cluster is running) and port 8080 like `http://192.168.1.3:8080`
 
+## manifestV2.yaml
+- this adds the configmap and secret resources in our deployments.
+- even though out secrets are not directly saved in deployments, its still only encoded and not encrypted.
+- one can easily decode our base64 encoded secrets if its deploy in this way, in later versions we will learn how to have secrets in a secret way on our clusters
 
 
