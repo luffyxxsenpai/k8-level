@@ -3,6 +3,9 @@
 - this is a modified version of [dockers official voting app](https://github.com/dockersamples/example-voting-app) 
 - when i started working on this i found some things difficult so had to do some adjustment in original code 
 - updated images are available in my [docker repo](https://hub.docker.com/repository/docker/luffyxxsenpai/voting/general)
+- my plan is to implement all the possible latest or production level practices as much as possible as i learn about them so its easy to start with those practices
+- i understand this is a very simple project so not much is possible but i will try to implement whatever i can and later do like this for other projects also 
+
 ---
 ### this is a voting application using 4 microservice 
 1. Vote: A frontend application where users can vote for their preferred option.
@@ -67,8 +70,6 @@ POSTGRES_DATABASE
 ---
 
 ## running using docker-compose
+- in the docker-compose file i am using my image directly. you can either use your own image or the dockerfile as context.
 
-**soon**
-
-
-
+`docker-compose up --build --remove-orphans`
