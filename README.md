@@ -1,5 +1,7 @@
 # Better Docker Voting App
 
+![diagram](https://github.com/luffyxxsenpai/better-docker-voting-app/blob/main/diagram.png)
+
 - this is a modified version of [dockers official voting app](https://github.com/dockersamples/example-voting-app) 
 - when i started working on this i found some things difficult so had to do some adjustment in original code 
 - updated images are available in my [docker repo](https://hub.docker.com/repository/docker/luffyxxsenpai/voting/general)
