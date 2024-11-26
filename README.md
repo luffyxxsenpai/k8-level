@@ -106,10 +106,16 @@ POSTGRES_DATABASE
 
 - manifestV3_1 -> we do host-based routing (my fav) 
 - manifestV3_2 -> we do path-based routing (BUGS, 404 , don't try)
-- manifestV3_3 -> we go HTTPS 
+- manifestV3_3 -> we go HTTPS (PENDING)
 
 **install ingress controller**
 - `minikube addons enable ingress` or `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml`
 - `kubectl get pods -n ingress-nginx`
 
 ---
+
+## Version4
+- your secrets are weak, NOT MINE 
+- we will look into different ways we can store our secerets safely on github and overall security
+
+
