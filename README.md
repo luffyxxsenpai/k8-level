@@ -134,5 +134,7 @@ POSTGRES_DATABASE
 - `kubeseal -f originalsec.yaml -w smartsecret.yaml`  (-f for original sec file and -w for output yaml)
 - now we can just paste the smartsecret.yaml content in our main manifest and we are good to go.
 
+### 
+
 
 
