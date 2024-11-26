@@ -1,0 +1,290 @@
+# added configmaps and secrets 
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: vote-secret
+  namespace: default
+spec:
+  encryptedData:
+    POSTGRES_PASSWORD: AgBxA33FAy/up4HHdAjW7NeQu6i5bkmKclkpA1+h9Cke7RaEeyOuhJyGlg/vd+tc8lMzr+GgRVuPZ3oNozptTGfO9Mux3sIy4rZSuA63nooc4bwLrqmvsXkW0LipxaMywpU8QorCqF/JpG4nIDGQ6jimoXaeTcYgorjqeUDffbdNuAgA1zYGXXQVl1poQgALs93zVVD+LG5sv8dQPhIr1rzooKk76P4aieq4zSFd3quREuqFDisBbS06dUzOR4kKyJsSK5vJksrds9SWOCmHgg0lh5VlnFKe1jR5EkyNWeuuQ+Y9XfGf3zHp/QgblZ+/ouetsBWTbjFGnpu2GmjI4mD66xK7P2+s5ySj76Inoh6ce8OTa3IiZ+UJG7y8GfbNNBDv5pCMRyEAnBiGwkHaek5jn+lgTuhVnp3M6RNqQ6rBu5iPHEDEkpBv1TzsfPD9xJjUJjaUbNXjfe5WqrHpbWrizyk4NVF7Sqz8nyGQrKxsas6Ia1jHx0rahM/lXBlTzSfnUEpFYI2HuFvqXtog4FOyosWMIaDkS3s3VfCbAmzgL0Vzjy1enRgdZ83Nv8H+fY0yEco0cpiQ6bdfA/J5SmyxFWK2XZewDi7Ubgv/lrP4xK/bygi92u2GHWr42EXOH5Ti7epHJNdKG4VzqNXqFoLgDfOL6vDIxDiMBMzZiKoU/iCXNmn4ebMupiXHmm1iT6+2VYR1nrK9nA==
+    POSTGRES_USER: AgCfD2dUcbPR5eNlXW4MQMHC4zR61Xw/sCb1zlJptYqv6jNLKL7gViZUdUADMEzAW55316nw5h6O0A4WK3XJhwG2jbsUO251po2SfkauQ6tArQI6vcoD6nFHQrqCxLMIUopemDPkzBK8YuORNdXQId/9nmTDSNOfrebhYxEuwQC5bFOnKin4KidIlqeAmQgpSyOijX9s6jDBvZcEmPdfDZ6MYCPDWaILi9nWXaBaUEtQQDpbRixgNFDB3V9M0sZC0epcz/VSp/14N3/2fhFNlCvL9/+HdK0gS0v0XLG5ejWMi6CchjXOK4xB3yg/ctkPnnpK8fZUG2WQ9ECxqM9ocp1JdM8HiWCWvkvtudZjjmi6l8pzxNua8dnS/8jFG4SOaQFjHr+H7SpMjEF4F6mUXpi+5VS5/zjjrb7JV4Owg9OIqKgqKdJka/JQtkIXCVCZ+wYHDSACJ6nsjLkMkZsK7NMZyNY6triRuEas+7Jvkac/DU6pjzJkYl3vqvY1tiieIY44GN+zJJgVgSMGNxz3rtzOzSrizz0iqbYwbhEQLB/VNvaNBJrKNFS60R/CgBMOGOAMRu3wgiseL2Ze/pT4Slq6sU/61Gqp00misdUhsZ5SR8ZWJNQBNjYwfYSkWoggrI9HldeIGk020BpX/QGz/wxvk5JxXob9G9vfV+4EmbcYkrxBfoQG06kP3jl8zQsVB4zh11AC2/tnhQ==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: vote-secret
+      namespace: default
+    type: Opaque
+---
+# ConfigMap for non-sensitive data
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vote-cm
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  POSTGRES_HOST: "postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DATABASE: "postgres"
+
+---
+# Vote Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vote
+  template:
+    metadata:
+      labels:
+        app: vote
+    spec:
+      containers:
+      - name: vote
+        image: luffyxxsenpai/voting:vote
+        ports:
+        - containerPort: 8080
+        env:
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: REDIS_PORT
+        - name: REDIS_DB
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: REDIS_DB
+
+---
+# vote service 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote
+spec:
+  selector:
+    app: vote
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+---
+# Worker Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: luffyxxsenpai/voting:worker
+        env:
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: REDIS_HOST
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: POSTGRES_HOST
+        - name: POSTGRES_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: POSTGRES_PORT
+        - name: POSTGRES_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: POSTGRES_DATABASE
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: vote-secret
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vote-secret
+              key: POSTGRES_PASSWORD
+
+---
+# Result Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: result
+  template:
+    metadata:
+      labels:
+        app: result
+    spec:
+      containers:
+      - name: result
+        image: luffyxxsenpai/voting:result
+        ports:
+        - containerPort: 8081
+        env:
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: POSTGRES_HOST
+        - name: POSTGRES_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: POSTGRES_PORT
+        - name: POSTGRES_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: POSTGRES_DATABASE
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: vote-secret
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vote-secret
+              key: POSTGRES_PASSWORD
+
+---
+# Result service 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: result
+spec:
+  selector:
+    app: result
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+  type: ClusterIP
+
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
+
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    app: redis
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
+
+---
+# Postgres Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: vote-secret
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vote-secret
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: vote-cm
+              key: POSTGRES_DATABASE
+
+---
+# Postgres Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+
+---
+

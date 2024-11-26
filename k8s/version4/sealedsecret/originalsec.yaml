@@ -1,0 +1,11 @@
+# Secrets for sensitive data
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vote-secret
+type: Opaque
+data:
+  POSTGRES_USER: "cG9zdGdyZXM="   # Base64 encoded "postgres"
+  POSTGRES_PASSWORD: "cGFzc3dvcmQ=" # Base64 encoded "password"
+
+

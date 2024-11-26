@@ -118,4 +118,21 @@ POSTGRES_DATABASE
 - your secrets are weak, NOT MINE 
 - we will look into different ways we can store our secerets safely on github and overall security
 
+### SEALED-SECRETS 
+- https://github.com/bitnami-labs/sealed-secrets 
+- in this we have two components, kubeseal and SEALED-SECRETS controller 
+- kubeseal - we will use this to encrypt our base64 encoded original secret
+- controller - when we apply the SEALED-SECRETS manifest, controller will see that, decrypt it and make a k8s native secret 
+- now we can push our SEALED-SECRETS version of manifest anywhere and whenever it will be created on our cluster, the controller will automatically create a native secret in our cluster, ofc those who have cluster access can see the native secret also but nothing will be out there on git as raw encoded secrets.
+
+- install kubeseal - `yay -S kubeseal` i use ARCH btw
+- install controller 
+  - `helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets`
+  - `helm install sealed-secrets -n kube-system --set-string fullnameOverride=sealed-secrets-controller sealed-secrets/sealed-secrets`
+
+- kubeseal by default look into `kube-system` namespace and contoller named `sealed-secrets-controller`, you can run `kubeseal --fetch-cert` to see if kubeseal is working properly. if you have installed in different ns or name you can run kubeseal using `kubeseal  --controller-name kubeseal-name --controller-namespace kubeseal-namespace  <rest of your commands>`
+- `kubeseal -f originalsec.yaml -w smartsecret.yaml`  (-f for original sec file and -w for output yaml)
+- now we can just paste the smartsecret.yaml content in our main manifest and we are good to go.
+
+
 
