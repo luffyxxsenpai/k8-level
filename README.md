@@ -132,7 +132,7 @@ POSTGRES_DATABASE
 - kubeseal by default look into `kube-system` namespace and contoller named `sealed-secrets-controller`, you can run `kubeseal --fetch-cert` to see if kubeseal is working properly. if you have installed in different ns or name you can run kubeseal using `kubeseal  --controller-name kubeseal-name --controller-namespace kubeseal-namespace  <rest of your commands>`
 - `kubeseal -f originalsec.yaml -w smartsecret.yaml`  (-f for original sec file and -w for output yaml)
 - now we can just paste the smartsecret.yaml content in our main manifest and we are good to go.
-
+---
 ### External Secret Store [ESO](https://external-secrets.io/latest/)
 - 
 - in this, our secrets are stored somewhere else like hashicorp vault, aws secret manager , etc 
@@ -154,6 +154,6 @@ POSTGRES_DATABASE
 - port-forward and you will see our application is working properly
 - another way is to create a service account since i am testing it locally i used access key 
 
-
+---
 
 
