@@ -118,8 +118,7 @@ POSTGRES_DATABASE
 - your secrets are weak, NOT MINE 
 - we will look into different ways we can store our secerets safely on github and overall security
 
-### SEALED-SECRETS 
-- https://github.com/bitnami-labs/sealed-secrets 
+### [SEALED-SECRETS](https://github.com/bitnami-labs/sealed-secrets)
 - in this we have two components, kubeseal and SEALED-SECRETS controller 
 - kubeseal - we will use this to encrypt our base64 encoded original secret
 - controller - when we apply the SEALED-SECRETS manifest, controller will see that, decrypt it and make a k8s native secret 
@@ -134,7 +133,27 @@ POSTGRES_DATABASE
 - `kubeseal -f originalsec.yaml -w smartsecret.yaml`  (-f for original sec file and -w for output yaml)
 - now we can just paste the smartsecret.yaml content in our main manifest and we are good to go.
 
-### 
+### External Secret Store [ESO](https://external-secrets.io/latest/)
+- 
+- in this, our secrets are stored somewhere else like hashicorp vault, aws secret manager , etc 
+- now we have 3 components
+  1. a secret consisting our user access keys for authentication 
+  2. a secret store which will talk to our aws secret manager 
+  3. a externalsecret which will define the secrets we want to fetch 
+- in this i am using aws secret manager and a user with a iam role for read only access to our secret manager
+
+- create a secret for aws user which has secretmanager policies `kubectl create secret generic aws-sm-accesskey --from-literal=access-key=<aws key> --from-literal=secret-access-key=<aws key secret>`
+
+- now create a secretstore which will use this secret to authenticate with aws, this can either created as namespace scoped or cluster scoped 
+- `kubectl apply -f secretsotre.yaml` , this will create a cluster scoped secretstore 
+- so use the correct command `kubectl get secretstore` or `kubectl get clustersecretstore`
+- now we can create a externalsecret which will use secretstore and fetch the required secret mentioned in the manifest.
+- `kubectl apply -f externalsecret.yaml`
+- this will fetch the secret from aws sm and create a native k8s secret which will be used by our applicaiton
+- now we can create our deployment `kubectl apply -f deployment.yaml`
+- port-forward and you will see our application is working properly
+- another way is to create a service account since i am testing it locally i used access key 
+
 
 
 
