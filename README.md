@@ -8,6 +8,13 @@
 - my plan is to implement all the possible latest or production level practices as much as possible as i learn about them so its easy to start with those practices
 - i understand this is a very simple project so not much is possible but i will try to implement whatever i can and later do like this for other projects also 
 
+## Tools List 
+1. [ingress-nginx](https://kubernetes.github.io/ingress-nginx/)
+2. [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets)
+3. [externalsecret](https://external-secrets.io/latest/)
+4. [cloudnative-pg](https://cloudnative-pg.io/)
+5. 
+
 ---
 ### this is a voting application using 4 microservice 
 1. Vote: A frontend application where users can vote for their preferred option.
@@ -108,7 +115,7 @@ POSTGRES_DATABASE
 - manifestV3_2 -> we do path-based routing (BUGS, 404 , don't try)
 - manifestV3_3 -> we go HTTPS (PENDING)
 
-**install ingress controller**
+[install ingress controller](https://kubernetes.github.io/ingress-nginx/)
 - `minikube addons enable ingress` or `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml`
 - `kubectl get pods -n ingress-nginx`
 
@@ -157,7 +164,7 @@ POSTGRES_DATABASE
 ---
 ## VERSION5
 
-### cloudnative-pg
+### [cloudnative-pg](https://cloudnative-pg.io/)
 - lets make our database reliable, running it in a deployment is the worst you can do.
 - ofcourse we have stateful sets and pvc and pv to have a reliable db setup but its tooo much of manual work
 - meet **CLOUDNATIVEPG** another cool stuff out of CNCF pocket, currently the best way to run db in k8s
