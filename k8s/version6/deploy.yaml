@@ -127,7 +127,6 @@ spec:
             secretKeyRef:
               name: vote-secret
               key: password
-
 ---
 # Result Deployment
 apiVersion: apps/v1

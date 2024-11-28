@@ -12,8 +12,12 @@
 1. Version1 = RAW 
 2. Version2 = configmap and secrets 
 3. Version3 = [ingress-nginx](https://kubernetes.github.io/ingress-nginx/)
-4. Version4 = [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets), [externalsecret](https://external-secrets.io/latest/)6. Version5 = [cloudnative-pg](https://cloudnative-pg.io/)
-5. Version6 = probes
+4. Version4 = [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets), [externalsecret](https://external-secrets.io/latest/)
+5. Version5 = [cloudnative-pg](https://cloudnative-pg.io/)
+6. Version6 = probes
+7. Version7 = Monitoring
+8. Version8 = Argocd
+
 
 ---
 ### this is a voting application using 4 microservice 
@@ -180,5 +184,13 @@ POSTGRES_DATABASE
 - `kubectl apply -f cloudnative-pg.yaml` this will start our db cluster with all the required resources like pods, pv, pvc, svc etc.
 
 - `kubectl get svc` you will see 3 different svc of our cluster with r,ro,rw access level so we can use the suitable one for our application, not all needs rw access, some only need r access like result microservice.
+---
+## Version6
 
+### probes
+- to have some fault tolarence in our applicaiton, we are adding probes
+- worker dont have any cause i couldnt figure out how to have it without changing worker code 
+- they are useful and not very hard 
+
+---
 
