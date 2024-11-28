@@ -8,12 +8,12 @@
 - my plan is to implement all the possible latest or production level practices as much as possible as i learn about them so its easy to start with those practices
 - i understand this is a very simple project so not much is possible but i will try to implement whatever i can and later do like this for other projects also 
 
-## Tools List 
-1. [ingress-nginx](https://kubernetes.github.io/ingress-nginx/)
-2. [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets)
-3. [externalsecret](https://external-secrets.io/latest/)
-4. [cloudnative-pg](https://cloudnative-pg.io/)
-5. 
+# LEVELS
+1. Version1 = RAW 
+2. Version2 = configmap and secrets 
+3. Version3 = [ingress-nginx](https://kubernetes.github.io/ingress-nginx/)
+4. Version4 = [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets), [externalsecret](https://external-secrets.io/latest/)6. Version5 = [cloudnative-pg](https://cloudnative-pg.io/)
+5. Version6 = probes
 
 ---
 ### this is a voting application using 4 microservice 
