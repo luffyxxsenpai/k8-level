@@ -1,3 +1,5 @@
+# version 6 template with probes for microservices 
+
 # ConfigMap for non-sensitive data
 apiVersion: v1
 kind: ConfigMap
