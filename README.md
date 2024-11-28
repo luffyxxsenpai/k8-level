@@ -155,5 +155,23 @@ POSTGRES_DATABASE
 - another way is to create a service account since i am testing it locally i used access key 
 
 ---
+## VERSION5
+
+### cloudnative-pg
+- lets make our database reliable, running it in a deployment is the worst you can do.
+- ofcourse we have stateful sets and pvc and pv to have a reliable db setup but its tooo much of manual work
+- meet **CLOUDNATIVEPG** another cool stuff out of CNCF pocket, currently the best way to run db in k8s
+- read more about it [here](https://cloudnative-pg.io/), its really awesome
+- we modified our deployment to use new secrets for db and the hostname in configmap
+- since worker needs a rw access and result only read access so we have given both service access to different instance of pgsql 
+
+- install `kubectl apply --server-side -f \
+  https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.24/releases/cnpg-1.24.1.yaml`
+
+- `kubectl get pods -n cnpg-system` the controller will be up and running 
+- `kubectl apply -f external-secret-aws.yaml`  we need secrets for our db, which will be created using ESO, it will have entry of `username` and `password` 
+- `kubectl apply -f cloudnative-pg.yaml` this will start our db cluster with all the required resources like pods, pv, pvc, svc etc.
+
+- `kubectl get svc` you will see 3 different svc of our cluster with r,ro,rw access level so we can use the suitable one for our application, not all needs rw access, some only need r access like result microservice.
 
 

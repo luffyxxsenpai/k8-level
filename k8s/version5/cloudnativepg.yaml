@@ -1,0 +1,22 @@
+# the secret will be created using external-secret-aws.yaml
+# create the secret first and then apply this
+
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cluster-vote-cnpg
+spec:
+  instances: 3
+  monitoring:
+    enablePodMonitor: true
+  bootstrap:
+    initdb:
+      database: votedb
+      owner: vote
+      secret:
+        name: vote-secret
+
+  storage:
+    size: 2Gi
+
